@@ -1,0 +1,8 @@
+9	refs/heads/release	refs/heads/master	python-postgresql-patches	IOS
+8	refs/heads/develop	refs/heads/release	python-postgresql-patches	IOS
+7	refs/heads/squash2/SOC-1264-spdb-undersoka-alternativ-for-python-byggserver	refs/heads/develop	python-postgresql-patches	IOS
+6	refs/heads/release	refs/heads/master	python-postgresql-patches	IOS
+5	refs/heads/develop	refs/heads/release	python-postgresql-patches	IOS
+4	refs/heads/squash/SOC-1264-spdb-undersoka-alternativ-for-python-byggserver	refs/heads/develop	python-postgresql-patches	IOS
+2	refs/heads/bugfix/SOC-1262-spdb-fel-i-patches-om-det-finns-tva-patches-med-samma-major-och-minor-i-samma	refs/heads/develop	python-postgresql-patches	IOS
+1	refs/heads/develop	refs/heads/master	python-postgresql-patches	IOS

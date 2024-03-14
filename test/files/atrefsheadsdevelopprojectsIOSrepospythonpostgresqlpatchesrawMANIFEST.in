@@ -1,0 +1,3 @@
+include postgresqlpatches/*.sql
+include postgresqlpatches/VERSION
+include examples/hundbidrag/*.sql

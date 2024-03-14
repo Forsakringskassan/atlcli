@@ -1,0 +1,46 @@
+[build-system]
+requires = [
+    'pip>=24.0',
+    'build>=1.0.3',
+    "setuptools>=67.6.1",
+    'twine>=4.0.2',
+    'keyring>=24.3.0',
+    'pip-system-certs>=4.0',
+    'wheel>=0.41.2',
+    'requests[security]>=2.31.0'
+]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "atlcli"
+# Version number is in file atlassiancli/__init__.py
+dynamic = ["version"]
+# Version 1.0.0 Introduces modules
+# Version 1.1.0 Improved testing
+# Version 1.2.0 Open source release candidate
+description = "Command line interface to Atlassian servers."
+readme = "readme.md"
+authors = [
+    { name="Forsäkringskassan IT", email="atlcli@forsakringskassan.se" }
+]
+maintainers = [
+    { name="Forsäkringskassan IT", email="atlcli@forsakringskassan.se" }
+]
+requires-python = ">=3.11.2"
+dependencies = [
+    'coloredlogs>=15.0.1',
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent"
+]
+[project.scripts]
+atlcli = "atlassiancli.__main__:main"
+[tool.setuptools.dynamic]
+version = {attr = "atlassiancli.__version__"}
+[project.urls]
+"Homepage" = "ssh://git@bitb.mynd.se:7999/ios/atlassian-cli.git"
+"Bug Tracker" = "https://jira.mynd.se/projects/SOC/"
+[tool.setuptools]
+packages = ["atlassiancli", "shared", "bitbucket", "jira", "tools"]

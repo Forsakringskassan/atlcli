@@ -1,0 +1,8 @@
+http.log
+master.cfg.sample
+state.sqlite
+twistd.log
+twistd.pid
+workers/
+gitpoller-workdir/
+buildbot.tac

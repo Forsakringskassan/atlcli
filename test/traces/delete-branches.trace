@@ -1,0 +1,2 @@
+1071d038-c014-4777-93c5-35ff35ab0c7e	delete-branches.py	request	DELETE	/rest/branch-utils/1.0/projects/IOS/repos/python-postgresql-patches/branches	-1	{"name": "refs/heads/feature/test", "dryRun": "false"}
+1071d038-c014-4777-93c5-35ff35ab0c7e	delete-branches.py	response	DELETE	/rest/branch-utils/1.0/projects/IOS/repos/python-postgresql-patches/branches	204	

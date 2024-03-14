@@ -1,0 +1,3 @@
+7	refs/heads/squash2/SOC-1264-spdb-undersoka-alternativ-for-python-byggserver	refs/heads/develop	python-postgresql-patches	IOS
+4	refs/heads/squash/SOC-1264-spdb-undersoka-alternativ-for-python-byggserver	refs/heads/develop	python-postgresql-patches	IOS
+2	refs/heads/bugfix/SOC-1262-spdb-fel-i-patches-om-det-finns-tva-patches-med-samma-major-och-minor-i-samma	refs/heads/develop	python-postgresql-patches	IOS

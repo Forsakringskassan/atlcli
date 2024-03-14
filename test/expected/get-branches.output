@@ -1,0 +1,4 @@
+refs/heads/feature/SOC-1367-spdb-signera-byggen	python-postgresql-patches	IOS
+refs/heads/master	python-postgresql-patches	IOS
+refs/heads/release	python-postgresql-patches	IOS
+refs/heads/develop	python-postgresql-patches	IOS

@@ -1,0 +1,9 @@
+.idea/
+__pycache__/
+.idea/
+**/*.py~
+atlassiancli.egg-info/
+dist/
+atlcli.egg-info/
+atl_cli.egg-info/
+build/

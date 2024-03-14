@@ -1,0 +1,2 @@
+55eaa5ce-11c8-43c9-aa8f-106fa49d5850	get-pr.py	request	GET	/rest/api/1.0/projects/IOS/repos/python-postgresql-patches/pull-requests?state=DECLINED&start=0	-1	
+55eaa5ce-11c8-43c9-aa8f-106fa49d5850	get-pr.py	response	GET	/rest/api/1.0/projects/IOS/repos/python-postgresql-patches/pull-requests?state=DECLINED&start=0	200	{"size": 0, "limit": 25, "isLastPage": true, "values": [], "start": 0}

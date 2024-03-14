@@ -1,0 +1,47 @@
+[build-system]
+requires = [
+    'pip>=23.1.2',
+    'build>=0.10.0',
+    'setuptools>=67.6.1',
+    'twine>=3.7.1',
+    'keyring>=23.13.1',
+    'pip-system-certs>=4.0',
+    'buildbot[bundle]>=3.8.0',
+    'virtualenv>=20.21.0',
+    'wheel>=0.40.0',
+    'requests[security]>=2.28.2',
+    'spdb-tools>=0.2.3',
+    'atlcli>=1.0.0'
+]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "postgresqlpatches"
+# Version number is in file postgresqlpatches/__init__.py
+# Version 0.2 introduces automatic builds
+# Version 0.2.1 Allows automatic upload to production since the number is not already used.
+dynamic = ["version"]
+description = "Module for organizing postgres patches"
+readme = "readme.md"
+authors = [
+    { name="Secret Agent", email="secret.agent@myndigheten.se" }
+]
+maintainers = [
+    { name="Myndigheten IT", email="xyz@myndigheten.se" }
+]
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent"
+]
+dependencies = [
+    'psycopg2>=2.9.5',
+]
+[tool.setuptools]
+packages = ["postgresqlpatches"]
+[tool.setuptools.dynamic]
+version = {attr = "postgresqlpatches.__version__"}
+[project.urls]
+"Homepage" = "https://bitb.mynd.se/projects/IOS/repos/python-postgresql-patches/browse"
+"Bug Tracker" = "https://jira.mynd.se/projects/SOC/"

@@ -1,0 +1,279 @@
+{
+  "expand": "renderedFields,names,schema,operations,editmeta,changelog,versionedRepresentations",
+  "id": "652618",
+  "self": "https://jira.myndigheten.se/rest/agile/1.0/issue/652618",
+  "key": "AES-8314",
+  "fields": {
+    "parent": {
+      "id": "652616",
+      "key": "AES-8313",
+      "self": "https://jira.myndigheten.se/rest/api/2/issue/652616",
+      "fields": {
+        "summary": "Jiraskriptning f\u00f6r duplo",
+        "status": {
+          "self": "https://jira.myndigheten.se/rest/api/2/status/10053",
+          "description": "",
+          "iconUrl": "https://jira.myndigheten.se/images/icons/statuses/generic.png",
+          "name": "XY Utveckling p\u00e5g\u00e5r",
+          "id": "10053",
+          "statusCategory": {
+            "self": "https://jira.myndigheten.se/rest/api/2/statuscategory/4",
+            "id": 4,
+            "key": "indeterminate",
+            "colorName": "yellow",
+            "name": "In Progress"
+          }
+        },
+        "priority": {
+          "self": "https://jira.myndigheten.se/rest/api/2/priority/11",
+          "iconUrl": "https://jira.myndigheten.se/images/icons/priorities/trivial.svg",
+          "name": "N/A",
+          "id": "11"
+        },
+        "issuetype": {
+          "self": "https://jira.myndigheten.se/rest/api/2/issuetype/7",
+          "id": "7",
+          "description": "Created by Jira Software - do not edit or delete. Issue type for a user story.",
+          "iconUrl": "https://jira.myndigheten.se/secure/viewavatar?size=xsmall&avatarId=13715&avatarType=issuetype",
+          "name": "Story",
+          "subtask": false,
+          "avatarId": 13715
+        }
+      }
+    },
+    "customfield_13100": null,
+    "fixVersions": [],
+    "customfield_13101": null,
+    "customfield_12411": null,
+    "resolution": null,
+    "customfield_12410": null,
+    "customfield_12413": null,
+    "customfield_12412": null,
+    "customfield_10500": null,
+    "customfield_12800": "{summaryBean=com.atlassian.jira.plugin.devstatus.rest.SummaryBean@68568ba7[summary={pullrequest=com.atlassian.jira.plugin.devstatus.rest.SummaryItemBean@4a5c0c58[overall=PullRequestOverallBean{stateCount=0, state='OPEN', details=PullRequestOverallDetails{openCount=0, mergedCount=0, declinedCount=0}},byInstanceType={}], build=com.atlassian.jira.plugin.devstatus.rest.SummaryItemBean@2a0a2fc[overall=com.atlassian.jira.plugin.devstatus.summary.beans.BuildOverallBean@2834503c[failedBuildCount=0,successfulBuildCount=0,unknownBuildCount=0,count=0,lastUpdated=<null>,lastUpdatedTimestamp=<null>],byInstanceType={}], review=com.atlassian.jira.plugin.devstatus.rest.SummaryItemBean@1e6e5105[overall=com.atlassian.jira.plugin.devstatus.summary.beans.ReviewsOverallBean@78760ddf[stateCount=0,state=<null>,dueDate=<null>,overDue=false,count=0,lastUpdated=<null>,lastUpdatedTimestamp=<null>],byInstanceType={}], deployment-environment=com.atlassian.jira.plugin.devstatus.rest.SummaryItemBean@7fc6e76f[overall=com.atlassian.jira.plugin.devstatus.summary.beans.DeploymentOverallBean@7579fd1b[topEnvironments=[],showProjects=false,successfulCount=0,count=0,lastUpdated=<null>,lastUpdatedTimestamp=<null>],byInstanceType={}], repository=com.atlassian.jira.plugin.devstatus.rest.SummaryItemBean@19737cc8[overall=com.atlassian.jira.plugin.devstatus.summary.beans.CommitOverallBean@512392cc[count=0,lastUpdated=<null>,lastUpdatedTimestamp=<null>],byInstanceType={}], branch=com.atlassian.jira.plugin.devstatus.rest.SummaryItemBean@1916fa18[overall=com.atlassian.jira.plugin.devstatus.summary.beans.BranchOverallBean@23bd5d04[count=0,lastUpdated=<null>,lastUpdatedTimestamp=<null>],byInstanceType={}]},errors=[],configErrors=[]], devSummaryJson={\"cachedValue\":{\"errors\":[],\"configErrors\":[],\"summary\":{\"pullrequest\":{\"overall\":{\"count\":0,\"lastUpdated\":null,\"stateCount\":0,\"state\":\"OPEN\",\"details\":{\"openCount\":0,\"mergedCount\":0,\"declinedCount\":0,\"total\":0},\"open\":true},\"byInstanceType\":{}},\"build\":{\"overall\":{\"count\":0,\"lastUpdated\":null,\"failedBuildCount\":0,\"successfulBuildCount\":0,\"unknownBuildCount\":0},\"byInstanceType\":{}},\"review\":{\"overall\":{\"count\":0,\"lastUpdated\":null,\"stateCount\":0,\"state\":null,\"dueDate\":null,\"overDue\":false,\"completed\":false},\"byInstanceType\":{}},\"deployment-environment\":{\"overall\":{\"count\":0,\"lastUpdated\":null,\"topEnvironments\":[],\"showProjects\":false,\"successfulCount\":0},\"byInstanceType\":{}},\"repository\":{\"overall\":{\"count\":0,\"lastUpdated\":null},\"byInstanceType\":{}},\"branch\":{\"overall\":{\"count\":0,\"lastUpdated\":null},\"byInstanceType\":{}}}},\"isStale\":true}}",
+    "customfield_12403": null,
+    "customfield_12406": null,
+    "customfield_12405": null,
+    "customfield_10900": null,
+    "customfield_12408": "0.0",
+    "customfield_12407": null,
+    "customfield_12409": null,
+    "lastViewed": "2022-03-08T08:12:31.117+0100",
+    "customfield_12000": null,
+    "customfield_12001": null,
+    "priority": {
+      "self": "https://jira.myndigheten.se/rest/api/2/priority/11",
+      "iconUrl": "https://jira.myndigheten.se/images/icons/priorities/trivial.svg",
+      "name": "N/A",
+      "id": "11"
+    },
+    "customfield_10100": null,
+    "customfield_12400": null,
+    "customfield_12402": null,
+    "labels": [],
+    "customfield_12401": null,
+    "customfield_11700": null,
+    "timeestimate": null,
+    "aggregatetimeoriginalestimate": null,
+    "versions": [],
+    "issuelinks": [],
+    "assignee": {
+      "self": "https://jira.myndigheten.se/rest/api/2/user?username=66115350",
+      "name": "66115350",
+      "key": "secret.agent",
+      "emailAddress": "secret.agent@myndigheten.se",
+      "avatarUrls": {
+        "48x48": "https://jira.myndigheten.se/secure/useravatar?ownerId=secret.agent&avatarId=15208",
+        "24x24": "https://jira.myndigheten.se/secure/useravatar?size=small&ownerId=secret.agent&avatarId=15208",
+        "16x16": "https://jira.myndigheten.se/secure/useravatar?size=xsmall&ownerId=secret.agent&avatarId=15208",
+        "32x32": "https://jira.myndigheten.se/secure/useravatar?size=medium&ownerId=secret.agent&avatarId=15208"
+      },
+      "displayName": "Secret Agent",
+      "active": true,
+      "timeZone": "Europe/Stockholm"
+    },
+    "status": {
+      "self": "https://jira.myndigheten.se/rest/api/2/status/1",
+      "description": "The issue is open and ready for the assignee to start work on it.",
+      "iconUrl": "https://jira.myndigheten.se/images/icons/statuses/open.png",
+      "name": "Open",
+      "id": "1",
+      "statusCategory": {
+        "self": "https://jira.myndigheten.se/rest/api/2/statuscategory/2",
+        "id": 2,
+        "key": "new",
+        "colorName": "blue-gray",
+        "name": "To Do"
+      }
+    },
+    "components": [],
+    "customfield_11300": "0|i2hzgu:",
+    "archiveddate": null,
+    "customfield_12900": null,
+    "aggregatetimeestimate": null,
+    "creator": {
+      "self": "https://jira.myndigheten.se/rest/api/2/user?username=66115350",
+      "name": "66115350",
+      "key": "secret.agent",
+      "emailAddress": "secret.agent@myndigheten.se",
+      "avatarUrls": {
+        "48x48": "https://jira.myndigheten.se/secure/useravatar?ownerId=secret.agent&avatarId=15208",
+        "24x24": "https://jira.myndigheten.se/secure/useravatar?size=small&ownerId=secret.agent&avatarId=15208",
+        "16x16": "https://jira.myndigheten.se/secure/useravatar?size=xsmall&ownerId=secret.agent&avatarId=15208",
+        "32x32": "https://jira.myndigheten.se/secure/useravatar?size=medium&ownerId=secret.agent&avatarId=15208"
+      },
+      "displayName": "Secret Agent",
+      "active": true,
+      "timeZone": "Europe/Stockholm"
+    },
+    "subtasks": [],
+    "customfield_14400": null,
+    "reporter": {
+      "self": "https://jira.myndigheten.se/rest/api/2/user?username=66115350",
+      "name": "66115350",
+      "key": "secret.agent",
+      "emailAddress": "secret.agent@myndigheten.se",
+      "avatarUrls": {
+        "48x48": "https://jira.myndigheten.se/secure/useravatar?ownerId=secret.agent&avatarId=15208",
+        "24x24": "https://jira.myndigheten.se/secure/useravatar?size=small&ownerId=secret.agent&avatarId=15208",
+        "16x16": "https://jira.myndigheten.se/secure/useravatar?size=xsmall&ownerId=secret.agent&avatarId=15208",
+        "32x32": "https://jira.myndigheten.se/secure/useravatar?size=medium&ownerId=secret.agent&avatarId=15208"
+      },
+      "displayName": "Secret Agent",
+      "active": true,
+      "timeZone": "Europe/Stockholm"
+    },
+    "customfield_14001": null,
+    "customfield_12100": null,
+    "aggregateprogress": {
+      "progress": 0,
+      "total": 0
+    },
+    "customfield_12500": null,
+    "progress": {
+      "progress": 0,
+      "total": 0
+    },
+    "votes": {
+      "self": "https://jira.myndigheten.se/rest/api/2/issue/AES-8314/votes",
+      "votes": 0,
+      "hasVoted": false
+    },
+    "worklog": {
+      "startAt": 0,
+      "maxResults": 20,
+      "total": 0,
+      "worklogs": []
+    },
+    "archivedby": null,
+    "issuetype": {
+      "self": "https://jira.myndigheten.se/rest/api/2/issuetype/5",
+      "id": "5",
+      "description": "The sub-task of the issue",
+      "iconUrl": "https://jira.myndigheten.se/secure/viewavatar?size=xsmall&avatarId=13716&avatarType=issuetype",
+      "name": "Sub-task",
+      "subtask": true,
+      "avatarId": 13716
+    },
+    "timespent": null,
+    "sprint": {
+      "id": 10621,
+      "self": "https://jira.myndigheten.se/rest/agile/1.0/sprint/10621",
+      "state": "active",
+      "name": "Sprint 75",
+      "startDate": "2022-02-28T10:24:00.000+01:00",
+      "endDate": "2022-03-11T10:24:00.000+01:00",
+      "activatedDate": "2022-02-28T08:36:13.810+01:00",
+      "originBoardId": 989,
+      "goal": ""
+    },
+    "project": {
+      "self": "https://jira.myndigheten.se/rest/api/2/project/12201",
+      "id": "12201",
+      "key": "AES",
+      "name": "ITAES",
+      "projectTypeKey": "software",
+      "avatarUrls": {
+        "48x48": "https://jira.myndigheten.se/secure/projectavatar?pid=12201&avatarId=10011",
+        "24x24": "https://jira.myndigheten.se/secure/projectavatar?size=small&pid=12201&avatarId=10011",
+        "16x16": "https://jira.myndigheten.se/secure/projectavatar?size=xsmall&pid=12201&avatarId=10011",
+        "32x32": "https://jira.myndigheten.se/secure/projectavatar?size=medium&pid=12201&avatarId=10011"
+      },
+      "projectCategory": {
+        "self": "https://jira.myndigheten.se/rest/api/2/projectCategory/10002",
+        "id": "10002",
+        "description": "F\u00f6r leveransomr\u00e5den med l\u00e5ngsiktig f\u00f6rvaltning",
+        "name": "Leveransomr\u00e5de"
+      }
+    },
+    "customfield_11000": null,
+    "customfield_13300": "0",
+    "customfield_13302": "0",
+    "aggregatetimespent": null,
+    "customfield_13301": "0",
+    "customfield_13304": "0.0%",
+    "customfield_13303": "0.0",
+    "customfield_12602": null,
+    "customfield_12601": null,
+    "resolutiondate": null,
+    "workratio": -1,
+    "watches": {
+      "self": "https://jira.myndigheten.se/rest/api/2/issue/AES-8314/watchers",
+      "watchCount": 0,
+      "isWatching": false
+    },
+    "created": "2022-03-08T08:12:28.767+0100",
+    "customfield_12200": null,
+    "customfield_14100": null,
+    "customfield_14101": null,
+    "customfield_12600": null,
+    "customfield_13801": null,
+    "updated": "2022-03-08T08:12:28.830+0100",
+    "timeoriginalestimate": null,
+    "description": null,
+    "customfield_13401": null,
+    "customfield_13400": null,
+    "customfield_11500": {
+      "self": "https://jira.myndigheten.se/rest/api/2/customFieldOption/15300",
+      "value": "ITAFI",
+      "id": "15300",
+      "disabled": false,
+      "child": {
+        "self": "https://jira.myndigheten.se/rest/api/2/customFieldOption/15306",
+        "value": "Team 7",
+        "id": "15306",
+        "disabled": false
+      }
+    },
+    "customfield_13403": null,
+    "timetracking": {},
+    "customfield_13402": null,
+    "customfield_10005": [
+      "com.atlassian.greenhopper.service.sprint.Sprint@120594c6[id=10621,rapidViewId=989,state=ACTIVE,name=Sprint 75,startDate=2022-02-28T10:24:00.000+01:00,endDate=2022-03-11T10:24:00.000+01:00,completeDate=<null>,activatedDate=2022-02-28T08:36:13.810+01:00,sequence=10621,goal=,autoStartStop=false]"
+    ],
+    "customfield_10401": null,
+    "customfield_10403": null,
+    "customfield_10800": null,
+    "attachment": [],
+    "flagged": false,
+    "customfield_10803": null,
+    "summary": "En vanlig subtask",
+    "customfield_14201": null,
+    "customfield_10000": null,
+    "customfield_14200": null,
+    "customfield_10001": null,
+    "customfield_12301": null,
+    "customfield_12300": null,
+    "customfield_10004": "9223372036854775807",
+    "customfield_12415": null,
+    "customfield_11600": null,
+    "customfield_12416": null,
+    "duedate": null,
+    "comment": {
+      "comments": [],
+      "maxResults": 0,
+      "total": 0,
+      "startAt": 0
+    }
+  }
+}
