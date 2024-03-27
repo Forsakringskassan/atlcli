@@ -18,6 +18,7 @@ dynamic = ["version"]
 # Version 1.0.0 Introduces modules
 # Version 1.1.0 Improved testing
 # Version 1.2.0 Open source release candidate
+# Version 1.2.1 Adapted version handling to new branch structure using "main" branch. Adapted installation documentation to github repo.
 description = "Command line interface to Atlassian servers."
 readme = "readme.md"
 authors = [
