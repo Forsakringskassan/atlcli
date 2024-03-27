@@ -4,7 +4,7 @@ import sys
 sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
 from shared import moduleversion
 
-BASE_VERSION = '1.2.0'
+BASE_VERSION = '1.2.1'
 
 __version__ = moduleversion.get_version(__file__, BASE_VERSION)
 
