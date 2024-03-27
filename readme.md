@@ -2,6 +2,7 @@
 ## Table of Contents
 [**Introduction**](#introduction)\
 [**Installation**](#installation)\
+[**Configuration**](#configuration)\
 [**Disclaimer**](#disclaimer)\
 [**Catalog structure**](#catalog_structure)\
 [**Examples**](#examples)\
@@ -39,19 +40,48 @@ The quality of the code should be exemplary so that the myndigheten will be prou
 The automatic testing of the code should be of exemplary high quality. This is a showcase of how much care myndigheten
 puts on automatic testing.
 ## Installation <a name="installation"></a>
+### Install on one system from github
+```
+$ git clone https://github.com/Forsakringskassan/atlcli.git
+$ cd atlcli
+$ python -m build -n 
+$ python -m pip install dist/atlcli-<version>-py3-none-any.whl
+```
+### Build and upload to your nexus for multiple installs
+#### Make sure you have access to nexus
+Setup our account in nexus. Log in using the web gui
+#### Set environments variables for twine
+Check your environment when done
+```
+$ printenv | grep TWINE
+TWINE_PASSWORD=**********
+TWINE_USERNAME=*********
+```
+#### Build
+```
+$ git clone https://github.com/Forsakringskassan/atlcli.git
+$ cd atlcli
+$ python -m build -n 
+```
+#### Upload to nexus
+```
+$ python -m twine upload --repository-url <your nexus upload url> dist/atlcli-<version>-py3-none-any.whl
+```
+
+#### Install
 ```
 $ python -m pip install atlcli
 ```
+## Configuration <a name="configuraition"></a>
 ### Get personal bitbucket token
 See https://confluence.atlassian.com/bitbucketserver/personal-access-tokens-939515499.html
-Create the token with WRITE permissions here: http://bitb.myndigheten.se/plugins/servlet/access-tokens/manage .
+Create the token with WRITE permissions in your local bitbucket server.
 Store the token permanently:
 ```
 $ setx BITBUCKET_TOKEN <your token>
 ```
 ### Get personal jira token
-Create the token here: 
-https://jira.myndigheten.se/secure/ViewProfile.jspa?selectedTab=com.atlassian.pats.pats-plugin:jira-user-personal-access-tokens .
+Create the token with WRITE permissions in your local jira server.
 Store the token permanently:
 ```
 $ setx JIRA_TOKEN <your token>
@@ -59,11 +89,11 @@ $ setx JIRA_TOKEN <your token>
 ### A few more environment variables
 Add the url to your bitbucket server to an environment variable.
 ```
-setx BITBUCKET_URL bitb.myndigheten.se
+setx BITBUCKET_URL <your bitbucket server uri>
 ```
 Add the url to your jira server to an environment variable.
 ```
-setx JIRA_URL jira.myndigheten.se
+setx JIRA_URL <your jira server uri>
 ```
 There is a problem with python and UTF-8. This is taken care of with this setting:
 ```
@@ -71,18 +101,15 @@ setx PYTHONUTF8 1
 ```
 ### Verify installation
 ```
-$ atlcli bitb get-projects | grep ASU
-APPII_FUSE_ASU
-ASU
+$ atlcli bitb get-projects 
 ```
 ## Disclaimer <a name="disclaimer"></a>
-Do not use the "Bitbucket Server Command Line Interface" as an argument for creating a multiple repo bitb structure. 
+Do not use the "Bitbucket Server Command Line Interface" as an argument for creating a multiple repo structure. 
 A monorepo structure is far better. 
 
 This is just a band-aid for a bad multiple repo design. 
 ## Catalog structure <a name="catalog_structure"></a>
-The three catalogs bitbucketscripts, jirascrips and toolscripts contain python scripts which can be called directly 
-if the repository is cloned from the bitbucket server.
+The three catalogs bitbucketscripts, jirascrips and toolscripts contain python scripts which can be called directly. These scripts are legacy and kept for backwards compatibility.
 
 The three catalogs bitbucket, jira and tools contain the heavy lifting functionality. Each of these catalogs contains 
 a readme describing how to use the code through module invocation.
@@ -124,6 +151,7 @@ Output is organized as columns and rows. Much inspired from relational database 
 ### Stack organization of output columns
 When a script adds data to its input row, the new data is prepended to the input line. The reason is increased reusability. If for example we would like to write a script to show epic information, this can be used independent of how we created the input data.
 ## Development <a name="development"></a>
+TODO. This part needs some care since we moved to github.
 ### Install python3
 Install python 3 and verify python version
 ```
@@ -185,7 +213,19 @@ $ python -m twine upload --repository-url https://python.repo.myndigheten.se/rep
 ### Unit tests
 The tests for bitbucket are in catalog bitbucket-tests. The test data is created by running the scripts with --trace option. The trace files are used by a test server mimicking the bitbucket server. These tests are regression tests.
 ## To do <a name="todo"></a>
-### Anonymize
-There are three files which need to be altered/removed before move to open source repo. Search for "Needs to be anonymized".
-### Unit tests
-Th
+### Verify tests
+After move to github the tests needs to be verified.
+### Adopt documentation 
+#### Git flow and dynamic versions
+How we create versions for branches other than main needs to be documented. Git flow needs to be documented in development part.
+#### Development part
+Chapter "Development" needs some changes due to the move to github.
+#### Contribute and error reporting
+We need to add information on how to contribute and how to report bugs.
+### Secure builds
+Harden the dependencies (coloredlogs) and the build itself
+### Upload to pypi
+Make the module easier to use by making builds to pypi.
+### Work on jira part
+The jira part is not as useful as the bitbucket part. Contributions are welcome.
+

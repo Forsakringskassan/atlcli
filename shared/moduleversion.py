@@ -1,7 +1,6 @@
 import logging
 import os
 import subprocess
-import re
 
 
 def get_version(file, base_version) -> str:
@@ -12,10 +11,13 @@ def get_version(file, base_version) -> str:
     ``__version__ = get_version(<base_version>, __file__)``
 
     If executing from a git source tree the version is calculated using base_version, current commit and branch name.
-    If in master branch, base_version is used. In all other branches the base version is extended with a plus followed
-    by the timestamp of the commit (down to second) followed by the first 15 charactes of the branch name. The version
+    If in main branch, base_version is used. In all other branches the base version is extended with string identifying
+    the stage followed
+    by the timestamp of the commit (down to second). The version
     is written to the file VERSION in the catalog identified by file parameter. If executed outside a git repo,
-    the VERSION file is read and returned.
+    the VERSION file content returned.
+
+    The stage string is "rc" if on the release branch, "b" if on the develop branch, and "a" for all other branches.
 
     In order for this to work you need to add MANIFEST.in at the root level. MANIFEST.in should add the VERSION
     file, like this: ``include <module>/VERSION``, <module> is the name of your module. And ``dynamic = ["version"]`` in
@@ -46,7 +48,7 @@ def get_version(file, base_version) -> str:
         result = subprocess.run(["git", "show", "-s", "--date=format:'%Y%m%d%H%M%S'", "--format=%cd", commit],
                                 shell=True, capture_output=True, text=True)
         timestamp = result.stdout.strip().replace("\'", "").replace("'", "")
-        if branch != "master":
+        if branch != "main":
             if branch == "release":
                 pre_name = "rc"
             elif branch == "develop":
