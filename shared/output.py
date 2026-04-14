@@ -35,9 +35,12 @@ def write(args):
     try:
         if type(args) is list:
             for line in args:
-                print(line)
+                stdout.write(line)
+                stdout.write(os.linesep)
         else:
-            print(args)
+            stdout.write(args)
+            stdout.write(os.linesep)
         stdout.flush()  # jalla jalla
     except Exception: ## broken pipe
-        return
+        stderr.write("\033[31mBroken pipe\033[0m")
+        stderr.write(os.linesep)

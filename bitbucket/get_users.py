@@ -1,5 +1,6 @@
 import json
 from shared import arguments as arg, output, trace as trace, connection
+from shared.quote import quote
 
 DESCR = 'Retrieves all users from the Bitbucket Server.'
 EPILOG = \
@@ -26,9 +27,9 @@ def main(parser, args):
     page = 0
     is_last_page = False
     while not is_last_page:
-        addr = "/rest/api/latest/users?start={}".format(page)
+        addr = quote("/rest/api/latest/users?start={}".format(page))
         if args.filter:
-            addr = "{}&filter={}".format(addr, args.filter)
+            addr = quote("{}&filter={}".format(addr, args.filter))
         output.print_debug(env, addr)
         conn = connection.create(env)
         h = {"User-Agent": env.version, "Accept": "application/json", "Authorization": token_header}

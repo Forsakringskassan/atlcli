@@ -4,7 +4,8 @@ from concurrent.futures import ThreadPoolExecutor
 from sys import stdin, stderr
 
 from shared import arguments as arg, trace as trace, output, connection
-from bitbucket import functions as cmn
+from bitbucket import functions as cmn, get_pr_and_merge
+from shared.quote import quote
 
 DESCR = 'Prints affected file names of a pull request for each pull request in input.'
 EPILOG = 'Each input starts with the pull request id, followed by two branch names (ignored) and then the repo name' \
@@ -26,13 +27,13 @@ def main(parser, args):
     token_header = "Bearer {}".format(env.token)
 
     def get_files(project, repo, pr_id, line):
-        pr_data, merge_data = cmn.get_pr_and_merge(env, project, repo, pr_id, env.script)
+        pr_data, merge_data = get_pr_and_merge.get_pr_and_merge(env, project, repo, pr_id, env.script)
         if pr_data is None:
-            return None
+            return []
         if pr_data['state'] != 'OPEN':
             return []
 
-        addr = "/rest/api/1.0/projects/{}/repos/{}/pull-requests/{}/diff".format(project, repo, pr_id)
+        addr = quote("/rest/api/1.0/projects/{}/repos/{}/pull-requests/{}/diff".format(project, repo, pr_id))
         conn = connection.create(env)
         h = {"User-Agent": env.version,
              "Content-Type": "application/json",
@@ -58,7 +59,7 @@ def main(parser, args):
                 return result
             else:
                 output.print_error(env, addr, response, env.script)
-                return None
+                return result
 
     with open(args.file) if args.file else stdin as input:
         with ThreadPoolExecutor(max_workers=args.workers) as executor:
@@ -81,5 +82,5 @@ def main(parser, args):
                 future.done()
                 output_lines = future.result()
                 if output_lines is None:
-                    exit(2)
+                    continue
                 output.write(output_lines)

@@ -6,6 +6,7 @@ from sys import stdin, stderr
 
 from shared import arguments as arg, output, trace as trace
 from jira import functions as cmn
+from shared.quote import quote
 
 WHITESPACE_ERROR = "\033[31m{}: Bad input, expected indata, input is only whitespace\033[0m{}"
 DESCR = 'For each issue in input, lists all subtasks.'
@@ -26,7 +27,7 @@ def main(parser, args):
     def get_subtasks(line, issue):
         token_header = "Bearer {}".format(env.token)
         result = []
-        issue_addr = "/rest/api/2/issue/{}".format(issue)
+        issue_addr = quote("/rest/api/2/issue/{}".format(issue))
         output.print_debug(env, issue_addr)
         conn = connection.create(env)
         h = {"User-Agent": env.version, "Accept": "application/json", "Authorization": token_header}
@@ -45,7 +46,7 @@ def main(parser, args):
 
         else:
             output.print_error(env, issue_addr, issue_response, env.script)
-            return None
+            return result
         return result
 
     with open(args.file) if args.file else stdin as input:
@@ -65,5 +66,5 @@ def main(parser, args):
                 future.done()
                 output_lines = future.result()
                 if output_lines is None:
-                    exit(2)
+                    continue
                 output.write(output_lines)

@@ -4,6 +4,7 @@ from concurrent.futures import ThreadPoolExecutor
 from sys import stdin, stderr
 
 from shared import arguments as arg, output, trace as trace, connection
+from shared.quote import quote
 
 DESCR = 'Prints pull request id for each input line. '
 EPILOG = 'Input starts with two optional branch names, followed by repo and project name. ' \
@@ -36,9 +37,10 @@ def main(parser, args):
         page = 0
         is_last_page = False
         while not is_last_page:
-            addr = \
-                "/rest/api/1.0/projects/{}/repos/{}/pull-requests?state={}&start={}".format(project, repo, args.state,
-                                                                                            page)
+            addr = quote("/rest/api/1.0/projects/{}/repos/{}/pull-requests?state={}&start={}".format(project,
+                                                                                                     repo,
+                                                                                                     args.state,
+                                                                                                     page))
             output.print_debug(env, "addr={}".format(addr))
             conn = connection.create(env)
             h = {"User-Agent": env.version, "Accept": "application/json", "Authorization": token_header}
@@ -66,7 +68,7 @@ def main(parser, args):
                     page = data['nextPageStart']
             else:
                 output.print_error(env, addr, response, env.script)
-                return None
+                return result
 
         return result
 
@@ -107,5 +109,5 @@ def main(parser, args):
                 future.done()
                 result = future.result()
                 if result is None:
-                    exit(2)
+                    continue
                 output.write(result)

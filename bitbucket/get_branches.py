@@ -1,9 +1,11 @@
 import os
 import re
+import logging
 from concurrent.futures import ThreadPoolExecutor
 from sys import stdin, stderr
 from shared import arguments as arg, output
-from bitbucket import functions as cmn
+from bitbucket import functions as cmn, search_branch_or_tag
+from shared.commonlogging import install_colored_logs
 
 DESCR = 'For each repo in input, lists or searches branch names.'
 EPILOG = 'Input is repo (first column) and project (second column). Other columns are ignored. Branch fully qualified names are used in the output, ' \
@@ -38,6 +40,9 @@ def configure_parser(parser, script):
 
 def main(parser, args):
     env = arg.get_common_arguments(parser, args, 'BITBUCKET')
+    logger = logging.getLogger(__name__)
+    install_colored_logs(env.loglevel)
+
     patterns = []
     if args.names is not None:
         for b in args.names:
@@ -56,13 +61,13 @@ def main(parser, args):
                     exit(3)
                 repo = columns[0]
                 project = columns[1]
-                future = executor.submit(cmn.search_branch_or_tag, env, project, repo, rstrip, 'branches', patterns,
-                                         args.default, args.displayid, args.invert, env.script)
+                future = executor.submit(search_branch_or_tag.search_branch_or_tag, env, project, repo, rstrip, 'branches', patterns,
+                                         args.default, args.displayid, args.invert, env.script, logger)
                 futures.append(future)
             input.close()
             for future in futures:
                 future.done()
                 output_lines = future.result()
                 if output_lines is None:
-                    exit(2)
+                    continue
                 output.write(output_lines)

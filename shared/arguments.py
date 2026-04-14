@@ -5,8 +5,11 @@ from sys import stderr
 import os
 import platform
 from .environment import Environment
-
+import logging
 from argparse import ArgumentParser
+import json
+# from shared import output
+
 # Environment variables
 SERVER_USER = "{}_USER"
 SERVER_TIMEOUT = "{}_TIMEOUT"
@@ -15,6 +18,7 @@ SERVER_URL = "{}_URL"
 SERVER_TOKEN = "{}_TOKEN"
 SERVER_SEPARATOR = "{}_SEPARATOR"
 
+logger = logging.getLogger(__name__)
 
 def add_common(parser, server, script_name, workers=True, user=False):
     """Adds common command line parameters to parser.
@@ -48,7 +52,7 @@ def add_common(parser, server, script_name, workers=True, user=False):
     parser.add_argument('-t', '--trace', action='store_true',
                         help='Turns on tracing of request/response to bitbucket server')
     parser.add_argument('-g', '--debug', action='store_true',
-                        help='Turns on debug printouts')
+                        help='Turns on debug printouts. ')
     parser.add_argument('-z', '--script', default=script_name, help='Script name in debug output')
     if user:
         server_user = SERVER_USER.format(server)
@@ -113,7 +117,8 @@ def get_common_arguments(parser, args, server):
     separator = get_separator(args, server)
     version = 'Python-' + platform.python_version()
     port = args.port
-    result = Environment(token, url, timeout, separator, trace, debug, version, script, port)
+    result = Environment(token, url, timeout, separator, trace, debug, args.loglevel, version, script, port)
+    logger.debug(f'Environment: {result}')
     return result
 
 

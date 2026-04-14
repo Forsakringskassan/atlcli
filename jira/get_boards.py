@@ -3,6 +3,7 @@ import json
 import urllib.parse
 
 from shared import arguments as arg, output, trace as trace
+from shared.quote import quote
 
 DESCR = 'Retrieves all boards from the Jira Server.'
 EPILOG = \
@@ -37,7 +38,7 @@ def main(parser, args):
         # if args.project:
         #     params['projectKeyOrId'] = args.project
         query = urllib.parse.urlencode(params)
-        addr = "/rest/agile/latest/board?%s" % query
+        addr = quote("/rest/agile/latest/board?%s" % query)
         output.print_debug(env, addr)
         conn = connection.create(env)
         h = {"User-Agent": env.version,

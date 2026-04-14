@@ -1,4 +1,6 @@
 import logging
+import os
+import coloredlogs
 
 COLOREDLOGS_LOG_FORMAT = 'COLOREDLOGS_LOG_FORMAT'
 LOG_FORMAT = '%(asctime)-15s %(levelname)-7s %(module)s %(message)s'
@@ -12,3 +14,8 @@ nameToLevel = {
     'debug': logging.DEBUG,
 }
 
+def install_colored_logs(loglevel):
+    if COLOREDLOGS_LOG_FORMAT in os.environ is None:
+        coloredlogs.install(level=nameToLevel[loglevel])
+    else:
+        coloredlogs.install(level=nameToLevel[loglevel], fmt=LOG_FORMAT)

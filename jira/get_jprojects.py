@@ -3,6 +3,7 @@ import json
 
 from shared import arguments as arg, output, trace as trace
 from shared.trace import trace_response
+from shared.quote import quote
 
 DESCR = 'Retrieves all projects from the Jira Server.'
 EPILOG = \
@@ -18,7 +19,7 @@ def configure_parser(parser, script):
 def main(parser, args):
     env = arg.get_common_arguments(parser, args, 'JIRA')
     token_header = "Bearer {}".format(env.token)
-    addr = "/rest/api/2/project"
+    addr = quote("/rest/api/2/project")
     output.print_debug(env, addr)
     conn = connection.create(env)
     h = {"User-Agent": env.version,

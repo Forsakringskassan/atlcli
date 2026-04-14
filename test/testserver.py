@@ -6,6 +6,7 @@ from http.server import HTTPServer, BaseHTTPRequestHandler
 from argparse import ArgumentDefaultsHelpFormatter,  ArgumentParser
 from uuid import UUID
 
+
 STOPPING = "stopping\n".encode('utf-8')
 
 path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))

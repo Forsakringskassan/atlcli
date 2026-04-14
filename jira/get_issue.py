@@ -1,6 +1,6 @@
-from shared import connection
 import json
 
+from shared import connection
 from shared import arguments as arg, output, trace as trace
 from shared.trace import trace_response
 from jira import functions as cmn
@@ -22,7 +22,7 @@ def main(parser, args):
     token_header = "Bearer {}".format(env.token)
     output_lines = []
     for key in args.keys:
-        addr = "/rest/api/2/issue/{}".format(key)
+        addr = quote("/rest/api/2/issue/{}".format(key))
         output.print_debug(env, addr)
         conn = connection.create(env)
         h = {"User-Agent": env.version,

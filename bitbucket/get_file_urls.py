@@ -1,8 +1,9 @@
 import os
-import urllib.parse
 from concurrent.futures import ThreadPoolExecutor
 from sys import stderr, stdin
-from shared import arguments as arg, output
+
+from shared import arguments as arg, output, quote
+from shared.quote import quote
 
 DESCR = 'Lists download url for each file name in input.'
 EPILOG = 'Each input line starts with the file name, followed by branch or tag name, repo name and lastly the ' \
@@ -20,11 +21,11 @@ def main(parser, args):
     def get_files(file, branch, repo, project, line):
         result = []
         try:
-            f = urllib.parse.quote(file)
-        except:
-            stderr.write("\033[31m{}: Could not urlencode {}\033[0m{}".format(env.script, file, os.linesep))
+            addr = quote("https://{}/projects/{}/repos/{}/raw/{}?at={}".format(env.url, project, repo, file, branch))
+        except Exception as inst:
+            stderr.write("\033[31m{}: Caught {} Could not urlencode {}\033[0m{}".
+                         format(inst, env.script, line, os.linesep))
             return result
-        addr = "https://{}/projects/{}/repos/{}/raw/{}?at={}".format(env.url, project, repo, f, branch)
         # print(addr)
         result.append('{}{}{}'.format(addr, env.sep, line))
         return result
@@ -34,12 +35,16 @@ def main(parser, args):
             futures = []
             for line in input:
                 rstrip = line.rstrip()
+                if rstrip.isspace() or rstrip == '':
+                    continue
                 columns = rstrip.split(env.sep)
+                if len(columns) == 0:
+                    continue
                 if len(columns) < 4:
                     stderr.write(
                         "\033[31m{}: Bad input, expected at least 4 columns: {}\033[0m{}".format(env.script, line,
                                                                                                  os.linesep))
-                    exit(3)
+                    continue
                 file = columns[0]
                 branch = columns[1]
                 repo = columns[2]
@@ -52,5 +57,5 @@ def main(parser, args):
                 future.done()
                 result = future.result()
                 if result is None:
-                    exit(2)
+                    continue
                 output.write(result)

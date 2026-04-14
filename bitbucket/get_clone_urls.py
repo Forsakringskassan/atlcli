@@ -2,7 +2,9 @@ import json
 import os
 from concurrent.futures import ThreadPoolExecutor
 from sys import stdin, stderr
+
 from shared import arguments as arg, trace as trace, output, connection
+from shared.quote import quote
 
 DESCR = 'For each repo in input adds the clone url.'
 EPILOG = 'Input is repo name followed project name. Output is the clone url followed by input line.'
@@ -22,7 +24,7 @@ def main(parser, args):
 
     def get_repo_urls(project, repo, line, type):
         result = []
-        addr = "/rest/api/1.0/projects/{}/repos/{}".format(project, repo)
+        addr = quote("/rest/api/1.0/projects/{}/repos/{}".format(project, repo))
         conn = connection.create(env)
         h = {"User-Agent": env.version, "Accept": "application/json", "Authorization": token_header}
         verb = "GET"
@@ -39,7 +41,7 @@ def main(parser, args):
                     break
         else:
             output.print_error(env, addr, response, env.script)
-            return None
+            return result
         return result
 
     with open(args.file) if args.file else stdin as input:
@@ -62,5 +64,5 @@ def main(parser, args):
                 future.done()
                 output_lines = future.result()
                 if output_lines is None:
-                    exit(2)
+                    continue
                 output.write(output_lines)

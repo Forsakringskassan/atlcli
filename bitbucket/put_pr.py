@@ -2,8 +2,10 @@ import json
 import os
 from concurrent.futures import ThreadPoolExecutor
 from sys import stderr, stdin
+
 from shared import arguments as arg, trace as trace, output, connection
-from bitbucket import functions as cmn
+from bitbucket import get_pr_and_merge
+from shared.quote import quote
 
 DESCR = 'Changes pull request state for each pull request in input.'
 EPILOG = 'The state for the user is passed as a parameter. State is changed only for open pull requests. ' \
@@ -25,12 +27,15 @@ def main(parser, args):
     user = arg.get_user(parser, args, 'BITBUCKET', env.script)
 
     def put(project, repo, pr_id, line):
-        pr_data, merge_data = cmn.get_pr_and_merge(env, project, repo, pr_id, env.script)
+        pr_data, merge_data = get_pr_and_merge.get_pr_and_merge(env, project, repo, pr_id, env.script)
         if pr_data is None:
             return None
         if pr_data['state'] != 'OPEN':
             return ['{}{}{}'.format(line, env.sep, pr_data['state'])]
-        addr = "/rest/api/1.0/projects/{}/repos/{}/pull-requests/{}/participants/{}".format(project, repo, pr_id, user)
+        addr = quote("/rest/api/1.0/projects/{}/repos/{}/pull-requests/{}/participants/{}".format(project,
+                                                                                                  repo,
+                                                                                                  pr_id,
+                                                                                                  user))
         conn = connection.create(env)
         h = {"User-Agent": env.version,
              "Content-Type": "application/json",
@@ -84,5 +89,5 @@ def main(parser, args):
                 future.done()
                 output_lines = future.result()
                 if output_lines is None:
-                    exit(2)
+                    continue
                 output.write(output_lines)

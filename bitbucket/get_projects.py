@@ -1,7 +1,8 @@
 import json
 import re
-from shared import arguments as arg, connection, trace as trace, output
 
+from shared import arguments as arg, connection, trace as trace, output
+from shared.quote import quote
 
 ADDR_TEMPLATE = "/rest/api/1.0/projects?start={}"
 
@@ -30,7 +31,7 @@ def main(parser, args):
     page = 0
     is_last_page = False
     while not is_last_page:
-        addr = ADDR_TEMPLATE.format(page)
+        addr = quote(ADDR_TEMPLATE.format(page))
         # print(addr)
         output.print_debug(env, addr)
         conn = connection.create(env)
@@ -77,5 +78,5 @@ def main(parser, args):
                 page = data['nextPageStart']
         else:
             output.print_error(env, addr, response, env.script)
-            exit(2)
+            continue
 

@@ -4,9 +4,11 @@ The purpose of this module is to hold reusable code. It contains only functions.
 import os
 import json
 import sys
+
 sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
 from shared import trace as trace
 from shared import connection
+from shared.quote import quote
 
 def extract_issue_data(issue):
     issue_id = issue['id']
@@ -32,7 +34,7 @@ def get_subtask(env, line, subtask_id):
     conn = connection.create(env)
     h = {"User-Agent": env.version, "Accept": "application/json", "Authorization": token_header}
     verb = "GET"
-    subtask_addr = "/rest/api/2/issue/{}".format(subtask_id)
+    subtask_addr = quote("/rest/api/2/issue/{}".format(subtask_id))
     subtask_uuid = trace.trace_request(env.script, "GET", subtask_addr) if env.trace else None
     conn.request("GET", subtask_addr, headers=h)
     subtask_response = conn.getresponse()

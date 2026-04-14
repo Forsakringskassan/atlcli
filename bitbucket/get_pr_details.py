@@ -3,7 +3,7 @@ import os
 from concurrent.futures import ThreadPoolExecutor
 from sys import stdin, stderr
 from shared import arguments as arg, conversion as conversion, output
-from bitbucket import functions as cmn
+from bitbucket import functions as cmn, get_pr_and_merge
 
 DESCR = \
     'Prints pull request details for each pull request in input.'
@@ -23,9 +23,9 @@ def main(parser, args):
     env = arg.get_common_arguments(parser, args, 'BITBUCKET')
 
     def get_pr_details(project, repo, id, line):
-        pr_data, merge_data = cmn.get_pr_and_merge(env, project, repo, id, env.script)
+        pr_data, merge_data = get_pr_and_merge.get_pr_and_merge(env, project, repo, id, env.script)
         if pr_data is None:
-            return None
+            return []
         created = conversion.to_time(pr_data['createdDate'])
         if len(pr_data['reviewers']) != 0:
             reviewer0 = None
@@ -107,5 +107,5 @@ def main(parser, args):
                 future.done()
                 result = future.result()
                 if result is None:
-                    exit(2)
+                    continue
                 output.write(result)

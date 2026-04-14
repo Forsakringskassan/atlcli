@@ -4,8 +4,11 @@ import os
 import re
 import sys
 import urllib
+
+from shared import connection
 from concurrent.futures import ThreadPoolExecutor
 from sys import stdin, stderr
+from shared.quote import quote
 
 sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
 from shared import arguments as arg, output, trace as trace
@@ -43,7 +46,7 @@ def main(parser, args):
         while not is_last_page:
             params = {'startAt': page}
             query = urllib.parse.urlencode(params)
-            addr = "/rest/agile/1.0/board/{}/issue?{}".format(board, query)
+            addr = quote("/rest/agile/1.0/board/{}/issue?{}".format(board, query))
             output.print_debug(env, addr)
             conn = connection.create(env)
             h = {"User-Agent": env.version,
@@ -119,5 +122,5 @@ def main(parser, args):
                 future.done()
                 output_lines = future.result()
                 if output_lines is None:
-                    exit(2)
+                    continue
                 output.write(output_lines)

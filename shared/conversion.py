@@ -1,5 +1,4 @@
 import datetime
-from urllib.parse import urlparse
 from pathlib import Path
 from os import path
 
@@ -25,3 +24,5 @@ def to_time(timestamp):
     :return: A time object which can be sorted.
     """
     return datetime.datetime.fromtimestamp(timestamp / 1000).strftime('%Y-%m-%dT%H:%M:%S.%f')
+
+

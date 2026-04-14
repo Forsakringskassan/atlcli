@@ -3,7 +3,8 @@ import os
 from concurrent.futures import ThreadPoolExecutor
 from sys import stdin, stderr
 from shared import arguments as arg, trace as trace, output, connection
-from bitbucket import functions as cmn
+from bitbucket import get_branch_or_tag
+from shared.quote import quote
 
 DESCR = 'Foreach two branch names in input, filters merged branch pairs.'
 EPILOG = 'Each input line starts with the two branch names, followed by project and repo names. ' \
@@ -31,7 +32,7 @@ def main(parser, args):
         result = []
         names = [from_branch, to_branch]
         [from_record, to_record] = \
-            cmn.get_branch_or_tag(env, project, repo, 'branchestags', names, env.script)
+            get_branch_or_tag.get_branch_or_tag(env, project, repo, 'branchestags', names, env.script)
         # print('from_record={}, to_record={}'.format(from_record['id'], to_record['id']))
         from_commit = from_record['latestCommit']
         to_commit = to_record['latestCommit']
@@ -45,8 +46,10 @@ def main(parser, args):
         return result
 
     def check_unchanged(project, repo, from_commit, to_commit):
-        addr = "/rest/api/1.0/projects/{}/repos/{}/commits/{}/changes?since={}".format(project, repo, from_commit,
-                                                                                       to_commit)
+        addr = quote("/rest/api/1.0/projects/{}/repos/{}/commits/{}/changes?since={}".format(project,
+                                                                                             repo,
+                                                                                             from_commit,
+                                                                                             to_commit))
         conn = connection.create(env)
         h = {"User-Agent": env.version, "Accept": "application/json", "Authorization": token_header}
         verb = "GET"
@@ -59,12 +62,12 @@ def main(parser, args):
             return len(data['values']) == 0
         else:
             output.print_error(env, addr, response, env.script)
-            return None
+            return result
 
     def is_parent(project, repo, parent_commit, child_commit, seen_commits):
         if parent_commit == child_commit:
             return True
-        addr = "/rest/api/1.0/projects/{}/repos/{}/commits/{}".format(project, repo, child_commit)
+        addr = quote("/rest/api/1.0/projects/{}/repos/{}/commits/{}".format(project, repo, child_commit))
         conn = connection.create(env)
         h = {"User-Agent": env.version, "Accept": "application/json", "Authorization": token_header}
         verb = "GET"
@@ -91,7 +94,7 @@ def main(parser, args):
             return False
         else:
             output.print_error(env, addr, response, env.script)
-            return None
+            return result
 
     with open(args.file) if args.file else stdin as input:
         with ThreadPoolExecutor(max_workers=args.workers) as executor:
@@ -115,5 +118,5 @@ def main(parser, args):
                 future.done()
                 output_lines = future.result()
                 if output_lines is None:
-                    exit(2)
+                    continue
                 output.write(output_lines)

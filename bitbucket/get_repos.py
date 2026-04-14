@@ -4,6 +4,7 @@ from concurrent.futures import ThreadPoolExecutor
 from sys import stdin, stderr
 
 from shared import arguments as arg, trace as trace, output, connection
+from shared.quote import quote
 
 DESCR = 'For each project in input, lists all repos.'
 EPILOG = \
@@ -30,7 +31,7 @@ def main(parser, args):
         is_last_page = False
         count = 0
         while not is_last_page:
-            addr = "/rest/api/1.0/projects/{}/repos?start={}".format(project, page)
+            addr = quote("/rest/api/1.0/projects/{}/repos?start={}".format(project, page))
             # print(addr)
             conn = connection.create(env)
             h = {"User-Agent": env.version, "Accept": "application/json", "Authorization": token_header}
@@ -52,7 +53,7 @@ def main(parser, args):
                     page = data['nextPageStart']
             else:
                 output.print_error(env, addr, response, env.script)
-                return None
+                return result
 
         if args.count:
             result.append("{}{}{}".format(count, env.sep, line))
@@ -75,5 +76,5 @@ def main(parser, args):
                 future.done()
                 output_lines = future.result()
                 if output_lines is None:
-                    exit(2)
+                    continue
                 output.write(output_lines)

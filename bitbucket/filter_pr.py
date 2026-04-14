@@ -2,8 +2,10 @@ import json
 import os
 from concurrent.futures import ThreadPoolExecutor
 from sys import stdin, stderr
+
 from shared import arguments as arg, trace as trace, output, connection
-from bitbucket import functions as cmn
+from bitbucket import get_pr_and_merge
+from shared.quote import quote
 
 DESCR = 'For each pull request in input, filter only those pull requests which ' \
         'can be merged and contains changes.'
@@ -29,9 +31,9 @@ def main(parser, args):
     token_header = "Bearer {}".format(env.token)
 
     def filter_pr(project, repo, pr_id, line):
-        pr_data, merge_data = cmn.get_pr_and_merge(env, project, repo, pr_id, env.script)
+        pr_data, merge_data = get_pr_and_merge.get_pr_and_merge(env, project, repo, pr_id, env.script)
         if pr_data is None:
-            return None
+            return []
         if pr_data['state'] != 'OPEN':
             return []
         can_merge = merge_data['canMerge']
@@ -51,7 +53,7 @@ def main(parser, args):
                 else:
                     return []
         if can_merge:
-            addr = "/rest/api/1.0/projects/{}/repos/{}/pull-requests/{}/diff".format(project, repo, pr_id)
+            addr = quote("/rest/api/1.0/projects/{}/repos/{}/pull-requests/{}/diff".format(project, repo, pr_id))
             conn = connection.create(env)
             h = {"User-Agent": env.version,
                  "Content-Type": "application/json",
@@ -68,7 +70,7 @@ def main(parser, args):
                             args.invert and len(data['diffs']) == 0) else []
             else:
                 output.print_error(env, addr, response, env.script)
-                return None
+                return []
         elif args.invert:
             return [line]
         else:
@@ -95,5 +97,5 @@ def main(parser, args):
                 future.done()
                 output_lines = future.result()
                 if output_lines is None:
-                    exit(2)
+                    continue
                 output.write(output_lines)

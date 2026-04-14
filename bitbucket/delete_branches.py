@@ -2,7 +2,9 @@ import json
 import os
 from concurrent.futures import ThreadPoolExecutor
 from sys import stdin, stderr
+
 from shared import arguments as arg, trace as trace, output, connection
+from shared.quote import quote
 
 DESCR = 'Deletes a branch foreach branch name in input.'
 EPILOG = 'Input is branch name, repo and project. Output is "DELETED" followed by input line.'
@@ -19,7 +21,7 @@ def main(parser, args):
     def delete_branch(project, repo, branch, line):
         token_header = "Bearer {}".format(env.token)
         result = []
-        addr = "/rest/branch-utils/1.0/projects/{}/repos/{}/branches".format(project, repo)
+        addr = quote("/rest/branch-utils/1.0/projects/{}/repos/{}/branches".format(project, repo))
         conn = connection.create(env)
         h = {"User-Agent": env.version,
              "Content-Type": "application/json",
@@ -39,7 +41,7 @@ def main(parser, args):
             result.append("DELETED{}{}".format(env.sep, line))
         else:
             output.print_error(env, addr, response, env.script)
-            return None
+            return result
         return result
 
     with open(args.file) if args.file else stdin as input:
@@ -63,5 +65,5 @@ def main(parser, args):
                 future.done()
                 output_lines = future.result()
                 if output_lines is None:
-                    exit(2)
+                    continue
                 output.write(output_lines)

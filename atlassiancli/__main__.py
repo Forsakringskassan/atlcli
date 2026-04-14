@@ -6,7 +6,7 @@ import coloredlogs
 import atlassiancli
 
 from shared import eformatter
-from shared.commonlogging import LOG_LEVELS, nameToLevel, COLOREDLOGS_LOG_FORMAT, LOG_FORMAT
+from shared.commonlogging import LOG_LEVELS, install_colored_logs
 from tools import compare_versions, count_group_by, get_version, join_columns, minus_columns, order_by, \
     select_columns, sum_group_by, union, where_columns, where_matches
 from jira import get_jprojects, get_issues, get_issue, get_boards, get_subtasks, create_subtask
@@ -221,10 +221,7 @@ def main():
 
     args = parser.parse_args()
     logger = logging.getLogger(__name__)
-    if COLOREDLOGS_LOG_FORMAT in os.environ is None:
-        coloredlogs.install(level=nameToLevel[args.loglevel])
-    else:
-        coloredlogs.install(level=nameToLevel[args.loglevel], fmt=LOG_FORMAT)
+    install_colored_logs(args.loglevel)
     logger.debug(f'Program arguments: {args}')
 
     if args.version:
@@ -236,7 +233,6 @@ def main():
         return 0
     args.func(parser, args)
     return 0
-
 
 if __name__ == '__main__':
     exit(main())

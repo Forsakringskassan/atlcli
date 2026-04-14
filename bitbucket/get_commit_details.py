@@ -4,6 +4,7 @@ from concurrent.futures import ThreadPoolExecutor
 from sys import stdin, stderr
 
 from shared import arguments as arg, trace as trace, conversion as conversion, output, connection
+from shared.quote import quote
 
 DESCR = 'Adds commit details for each commit id in input.'
 EPILOG = 'Input is commit id (first column), repo (third column) and project (fourth column). ' \
@@ -20,7 +21,7 @@ def main(parser, args):
     token_header = "Bearer {}".format(env.token)
 
     def get_commit_details(project, repo, id, line):
-        addr = "/rest/api/1.0/projects/{}/repos/{}/commits/{}".format(project, repo, id)
+        addr = quote("/rest/api/1.0/projects/{}/repos/{}/commits/{}".format(project, repo, id))
         # print(addr)
         conn = connection.create(env)
         h = {"User-Agent": env.version, "Accept": "application/json", "Authorization": token_header}
@@ -40,7 +41,7 @@ def main(parser, args):
             return ['{}{}{}'.format(json.dumps(details), env.sep, line)]
         else:
             output.print_error(env, addr, response, env.script)
-            return None
+            return []
 
     with open(args.file) if args.file else stdin as input:
         with ThreadPoolExecutor(max_workers=args.workers) as executor:
@@ -63,5 +64,5 @@ def main(parser, args):
                 future.done()
                 result = future.result()
                 if result is None:
-                    exit(2)
+                    continue
                 output.write(result)

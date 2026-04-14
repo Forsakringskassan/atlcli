@@ -6,6 +6,7 @@ from concurrent.futures import ThreadPoolExecutor
 from sys import stdin, stderr
 
 from shared import arguments as arg, trace as trace, output, conversion as conversion, connection
+from shared.quote import quote
 
 DESCR = 'Lists file details for each file name in input.'
 EPILOG = 'Each input line starts with the file name, followed by branch name and lastly the project name. '\
@@ -40,8 +41,10 @@ def main(parser, args):
                 data = cache[cache_key]
                 mutex.release()
             else:
-                addr = "/rest/api/1.0/projects/{}/repos/{}/last-modified/{}?at={}".format(project, repo, catalog,
-                                                                                          branch)
+                addr = quote("/rest/api/1.0/projects/{}/repos/{}/last-modified/{}?at={}".format(project,
+                                                                                                repo,
+                                                                                                catalog,
+                                                                                                branch))
                 # print(addr)
                 conn = connection.create(env)
                 h = {"User-Agent": env.version, "Accept": "application/json", "Authorization": token_header}
@@ -57,7 +60,7 @@ def main(parser, args):
                 else:
                     mutex.release()
                     output.print_error(env, addr, response, env.script)
-                    return None
+                    return result
         files = data["files"]
         file = files[basename]
         commit = file['id']
@@ -94,5 +97,5 @@ def main(parser, args):
                 future.done()
                 result = future.result()
                 if result is None:
-                    exit(2)
+                    continue
                 output.write(result)

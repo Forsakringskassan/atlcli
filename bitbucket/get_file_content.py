@@ -1,10 +1,10 @@
 import re
-import urllib.request
 from concurrent.futures import ThreadPoolExecutor
 from sys import stderr, stdin
-from shared import arguments as arg, conversion as conversion, output
+import logging
+from shared import arguments as arg, conversion as conversion, output, connection
 from bitbucket import functions as cmn
-
+from shared.commonlogging import install_colored_logs
 
 def main_count(parser, args):
     main(parser, args, True, None, None)
@@ -54,6 +54,10 @@ def main(parser, args, counting, before, after):
     # global env, pattern, token_header, sub, separator_pattern, fallback, newline, invert, rstrip
     # sname = os.path.basename(argv[0])
     env = arg.get_common_arguments(parser, args, 'BITBUCKET')
+    logger = logging.getLogger(__name__)
+    install_colored_logs(env.loglevel)
+
+    env = arg.get_common_arguments(parser, args, 'BITBUCKET')
     pattern = re.compile(args.pattern)
     token_header = "Bearer {}".format(env.token)
     sub = bytes(args.substitute, "utf-8").decode("unicode_escape")
@@ -63,6 +67,7 @@ def main(parser, args, counting, before, after):
     invert = args.invert_match
 
     def get_file_lines(input_line, download_url, counting, before, after):
+        logger.debug(f'input_line={input_line}')
         encoding = 'UTF-8'
         f = None
         if env.trace:
@@ -79,61 +84,68 @@ def main(parser, args, counting, before, after):
         result = []
         lines = []
         matches = []
-        h = {b"User-Agent": env.version, b"Authorization": token_header}
-        output.print_debug(env, download_url)
-        output.stdout.flush()
-        request = urllib.request.Request(download_url, headers=h, data=None, method="GET")
-        response = urllib.request.urlopen(request)
+        #h = {b"User-Agent": env.version, b"Authorization": token_header, b"Accept": b"application/json"}
+        logger.debug(f'url={download_url}')
+        # request = urllib.request.Request(download_url, headers=h, data=None, method="GET")
+        # response = urllib.request.urlopen(request)
+        conn = connection.create(env)
+        h = {"User-Agent": env.version, "Accept": "application/json", "Authorization": token_header}
         i = 0
-        if response.status == 200:
-            for response_lines in response:
-                # Most input_lines are correctly split here, the rest are taken care of with split method
-                input_lines = response_lines.split(newline)
-                for l in input_lines:
-                    if env.trace and f is not None:
-                        f.write(l)
-                    l2 = None
-                    while l2 is None:
-                        l2, e = cmn.decode(l, encoding)
-                        if l2 is None:
-                            if encoding == fallback:
-                                stderr.write(
-                                    "\033[31m{}: Could not decode {}: {} \033[0m\n".format(env.script, download_url,
-                                                                                           str(e)))
-                                if env.trace and f is not None:
-                                    f.close()
-                                return None
-                            else:
-                                encoding = fallback
+        try:
+            conn.request("GET", download_url, headers=h)
+            response = conn.getresponse()
+            if response.status == 200:
+                for response_lines in response:
+                    # Most input_lines are correctly split here, the rest are taken care of with split method
+                    input_lines = response_lines.split(newline)
+                    for l in input_lines:
+                        if env.trace and f is not None:
+                            f.write(l)
+                        l2 = None
+                        while l2 is None:
+                            l2, e = cmn.decode(l, encoding)
+                            if l2 is None:
+                                if encoding == fallback:
+                                    stderr.write(
+                                        "\033[31m{}: Could not decode {}: {} \033[0m\n".format(env.script, download_url,
+                                                                                               str(e)))
+                                    if env.trace and f is not None:
+                                        f.close()
+                                    return result
+                                else:
+                                    encoding = fallback
 
-                m = pattern.fullmatch(l2)
-                lines.append(l2)
-                if (m is not None and not invert) or (m is None and invert):
-                    if (not i in matches) and i >= 0:
-                        matches.append(i)
-                    if not counting:
-                        for j in range(i - before, i + 1):
-                            if not j in matches:
-                                matches.append(j)
-                        for j in range(i, i + after + 1):
-                            if not j in matches:
-                                matches.append(j)
-                i += 1
-            if counting:
-                result.append('{}{}{}'.format(str(len(matches)), env.sep, input_line))
+                    m = pattern.fullmatch(l2)
+                    lines.append(l2)
+                    if (m is not None and not invert) or (m is None and invert):
+                        if (not i in matches) and i >= 0:
+                            matches.append(i)
+                        if not counting:
+                            for j in range(i - before, i + 1):
+                                if not j in matches:
+                                    matches.append(j)
+                            for j in range(i, i + after + 1):
+                                if not j in matches:
+                                    matches.append(j)
+                    i += 1
+                if counting:
+                    result.append('{}{}{}'.format(str(len(matches)), env.sep, input_line))
+                else:
+                    matches.sort()
+                    for i in matches:
+                        if i < len(lines):
+                            result.append('{}{}{}{}{}'.format(i,
+                                                              env.sep,
+                                                              re.sub(separator_pattern, sub, lines[i]),
+                                                              env.sep,
+                                                              input_line))
+
             else:
-                matches.sort()
-                for i in matches:
-                    if i < len(lines):
-                        result.append('{}{}{}{}{}'.format(i,
-                                                          env.sep,
-                                                          re.sub(separator_pattern, sub, lines[i]),
-                                                          env.sep,
-                                                          input_line))
-
-        else:
-            output.print_error(env, download_url, response, env.script)
-            return None
+                output.print_error(env, download_url, response, env.script)
+                return result
+        except Exception as inst:
+            logger.error(f'Caught {inst} for download_url={download_url}')
+            return result
         if env.trace and f is not None:
             f.close()
         return result
@@ -143,6 +155,8 @@ def main(parser, args, counting, before, after):
             futures = []
             for line in input:
                 rstrip = line.rstrip()
+                if rstrip.isspace() or rstrip == '':
+                    continue
                 columns = rstrip.split(env.sep)
                 download_url = columns[0]
                 # print("download_url = {}".format(download_url))
@@ -153,5 +167,5 @@ def main(parser, args, counting, before, after):
                 future.done()
                 result = future.result()
                 if result is None:
-                    exit(2)
+                    continue
                 output.write(result)

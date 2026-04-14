@@ -6,6 +6,7 @@ from concurrent.futures import ThreadPoolExecutor
 
 from shared import arguments as arg, output, trace as trace
 from jira import functions as cmn
+from shared.quote import quote
 
 WHITESPACE_ERROR = "\033[31m{}: Bad input, expected indata, input is only whitespace\033[0m{}"
 DESCR = 'Creates a jira subtask for each issue in input.'
@@ -27,7 +28,7 @@ def main(parser, args):
 
     def create_subtask(line, issue, project):
         result = []
-        addr = "/rest/api/2/issue"
+        addr = quote("/rest/api/2/issue")
         output.print_debug(env, addr)
         conn = connection.create(env)
         h = {"User-Agent": env.version,
@@ -67,7 +68,7 @@ def main(parser, args):
                 result.append(subtask_line)
         else:
             output.print_error(env, addr, create_response, env.script)
-            return None
+            return result
         return result
 
     with open(args.file) if args.file else sys.stdin as input:
@@ -88,5 +89,5 @@ def main(parser, args):
                 future.done()
                 output_lines = future.result()
                 if output_lines is None:
-                    exit(2)
+                    continue
                 output.write(output_lines)

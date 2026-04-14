@@ -6,6 +6,7 @@ from sys import stderr, stdin
 
 from shared import arguments as arg, conversion as conversion, output
 from bitbucket import functions as cmn
+from shared.quote import quote
 
 DESCR = 'Prints pull request diffs for each pull request in input.'
 EPILOG = 'Each input starts with the pull request id, followed by two branch names (ignored) and then the repo name' \
@@ -32,7 +33,7 @@ def main(parser, args):
 
     def get_pr_diff(line, project, repo, id):
         encoding = 'UTF-8'
-        addr = "/rest/api/1.0/projects/{}/repos/{}/pull-requests/{}.diff".format(project, repo, id)
+        addr = quote("/rest/api/1.0/projects/{}/repos/{}/pull-requests/{}.diff".format(project, repo, id))
         conn = connection.create(env)
         h = {"User-Agent": env.version, "Accept": "text/plain", "Authorization": token_header}
         verb = "GET"
@@ -63,7 +64,7 @@ def main(parser, args):
                                     "\033[31m{}: Could not decode {}: {} \033[0m\n".format(env.script, addr, str(e)))
                                 if env.trace and f is not None:
                                     f.close()
-                                return None
+                                return result
                             else:
                                 encoding = fallback
                     if len(l2) != 0:

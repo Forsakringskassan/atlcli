@@ -2,7 +2,7 @@ import os
 from concurrent.futures import ThreadPoolExecutor
 from sys import stdin, stderr
 from shared import arguments as arg, output
-from bitbucket import functions as cmn
+from bitbucket import functions as cmn, get_branch_or_tag
 
 DESCR = 'For each branch in input, prints latest commit id.'
 EPILOG = 'Input is branch (first column), repo (second column) and project (third column). ' \
@@ -18,7 +18,7 @@ def main(parser, args):
 
     def get_commits(project, repo, name, line):
         branch_or_tag = 'tags' if 'tags' in name else 'branches'
-        values = cmn.get_branch_or_tag(env, project, repo, branch_or_tag, [name], env.script)
+        values = get_branch_or_tag.get_branch_or_tag(env, project, repo, branch_or_tag, [name], env.script)
         commit = values[0]['latestCommit']
         return "{}{}{}".format(commit, env.sep, line)
 
@@ -46,5 +46,5 @@ def main(parser, args):
                 future.done()
                 result = future.result()
                 if result is None:
-                    exit(2)
+                    continue
                 output.write(result)

@@ -5,6 +5,7 @@ from concurrent.futures import ThreadPoolExecutor
 from sys import stdin, stderr
 
 from shared import arguments as arg, trace as trace, output
+from shared.quote import quote
 
 DESCR = 'Creates a pull request for each two branch names in input.'
 EPILOG = 'Each line starts with the two branch names, followed by the repo name and then project name. ' \
@@ -26,7 +27,7 @@ def main(parser, args):
 
     def create_pullrequest(project, repo, from_branch, to_branch, line):
         result = []
-        addr = "/rest/api/1.0/projects/{}/repos/{}/pull-requests".format(project, repo)
+        addr = quote("/rest/api/1.0/projects/{}/repos/{}/pull-requests".format(project, repo))
         conn = connection.create(env)
         reviewer = {'user': {'name': args.reviewer}} if args.reviewer else None
         h = {"User-Agent": env.version,
@@ -74,7 +75,7 @@ def main(parser, args):
             result.append('{}{}{}'.format(data['id'], env.sep, line))
         else:
             output.print_error(env, addr, response, env.script)
-            return None
+            return result
         return result
 
     with open(args.file) if args.file else stdin as input:
@@ -99,5 +100,5 @@ def main(parser, args):
                 future.done()
                 output_lines = future.result()
                 if output_lines is None:
-                    exit(2)
+                    continue
                 output.write(output_lines)

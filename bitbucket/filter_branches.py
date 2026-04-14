@@ -2,7 +2,7 @@ import os
 from concurrent.futures import ThreadPoolExecutor
 from sys import stdin, stderr
 from shared import arguments as arg, output
-from bitbucket import functions as cmn
+from bitbucket import functions as cmn, get_branch_or_tag
 
 DESCR = 'For each branch in input, filters existing branches.'
 EPILOG = 'Input is a number of branch names followed by repo (next last column) and project (last column). ' \
@@ -21,7 +21,7 @@ def main(parser, args):
 
     def filter_branch(project, repo, names, line):
         result = []
-        matches = cmn.get_branch_or_tag(env, project, repo, 'branches', names, env.script)
+        matches = get_branch_or_tag.get_branch_or_tag(env, project, repo, 'branches', names, env.script)
         if None not in matches:
             result.append(line)
         return result
@@ -48,5 +48,5 @@ def main(parser, args):
                 future.done()
                 output_lines = future.result()
                 if output_lines is None:
-                    exit(2)
+                    continue
                 output.write(output_lines)

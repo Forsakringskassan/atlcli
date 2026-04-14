@@ -3,7 +3,7 @@ from concurrent.futures import ThreadPoolExecutor
 from sys import stdin, stderr
 
 from shared import arguments as arg, output
-from bitbucket import functions as cmn
+from bitbucket import functions as cmn, create_branch_or_tag
 
 DESCR = 'Creates a tag for each commit in input. '
 EPILOG = 'Input line is commit id (column 0), repo name (column 2) and project name (column 3). ' \
@@ -35,7 +35,7 @@ def main(parser, args):
                 commit = columns[0]
                 repo = columns[2]
                 project = columns[3]
-                future = executor.submit(cmn.create_branch_or_tag, env, project, repo, 'tags', commit, name,
+                future = executor.submit(create_branch_or_tag.create_branch_or_tag, env, project, repo, 'tags', commit, name,
                                          message, env.script)
                 futures.append(future)
             input.close()
@@ -43,5 +43,5 @@ def main(parser, args):
                 future.done()
                 output_lines = future.result()
                 if output_lines is None:
-                    exit(2)
+                    continue
                 output.write(output_lines)
